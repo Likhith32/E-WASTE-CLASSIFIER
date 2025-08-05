@@ -1,0 +1,285 @@
+/* static/css/style.css */
+
+/* --- General Reset & Font --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-x: hidden;
+    color: #333;
+}
+
+/* --- Animated Green Leaves Background --- */
+.leaf-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.leaf-container::before {
+    content: '🍃';
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0;
+    animation: fall 15s linear infinite;
+    animation-delay: 0s;
+    left: 10%;
+}
+.leaf-container::after {
+    content: '🌿';
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0;
+    animation: fall 20s linear infinite;
+    animation-delay: 2s;
+    left: 20%;
+}
+/* Add more pseudo-elements for more leaves */
+:is(.leaf-container)::before, :is(.leaf-container)::after {
+    --leaf-1: '🍃'; --leaf-2: '🌿'; --leaf-3: '🍁';
+}
+.leaf-container:nth-child(odd)::before { content: var(--leaf-2); }
+.leaf-container:nth-child(even)::before { content: var(--leaf-3); animation-duration: 12s; }
+
+/* We can create more leaves by adding more elements in HTML, but for simplicity, CSS pseudo-elements are used here */
+/* For a full effect, you could add 10-15 empty <span>s inside .leaf-container and style them individually */
+
+@keyframes fall {
+    0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        top: 110%;
+        transform: translateX(10vw) rotate(720deg);
+        opacity: 0.5;
+    }
+}
+
+
+/* --- Main Container --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px rgba(40, 82, 23, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- Header --- */
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo {
+    height: 70px;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #4caf50;
+    font-weight: 500;
+}
+
+/* --- Stats Section --- */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #81c784, #4caf50);
+    border-radius: 16px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: block;
+}
+
+/* --- Categories Section --- */
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.category {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #ffffff;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.category:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(86, 171, 47, 0.2);
+    border-color: #56ab2f;
+}
+
+.category-icon {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+.category:hover .category-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.category-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* --- Upload Section --- */
+.upload-section form {
+    text-align: center;
+}
+
+.upload-area {
+    border: 3px dashed #81c784;
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-radius: 24px;
+    background: #f8fff8;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.upload-area.drag-over {
+    border-color: #38ef7d;
+    background: #e8f5e9;
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: #4caf50;
+    animation: bounce 2s infinite ease-in-out;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.upload-text {
+    font-size: 1.1rem;
+    color: #333;
+    margin-top: 1rem;
+}
+.upload-text strong {
+    display: block;
+    font-size: 1.2rem;
+}
+.upload-subtext {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+#file-input {
+    display: none; /* Hide the default input */
+}
+#file-name-display {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 500;
+    color: #56ab2f;
+}
+
+/* --- Button --- */
+.classify-btn {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(22, 122, 92, 0.2);
+}
+
+.classify-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(22, 122, 92, 0.3);
+}
+
+.classify-btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body { padding: 1rem; }
+    .container { padding: 1.5rem; }
+    h1 { font-size: 2.5rem; }
+    .stats { flex-direction: column; gap: 1rem; }
+    .categories { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 2rem; }
+    .subtitle { font-size: 1rem; }
+    .categories { grid-template-columns: repeat(2, 1fr); }
+    .upload-area { padding: 2rem 1rem; }
+    .classify-btn { width: 100%; padding: 1rem; }
+}

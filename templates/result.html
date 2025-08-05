@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classification Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="leaf-container"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🔋 Classification Result</h1>
+            <p class="subtitle">Your e-waste item has been successfully analyzed</p>
+        </div>
+
+        <div class="result">
+            <div class="main-prediction stat-item" style="margin-bottom: 2rem;">
+                <span style="font-size: 2rem;">{{ category_icons.get(ewaste_type, '📦') }}</span><br>
+                <span class="stat-number">{{ ewaste_type.title() }}</span>
+                <div>Confidence: {{ '%.1f'|format(confidence * 100) }}%</div>
+            </div>
+        </div>
+
+        <div class="top-predictions">
+            <h2 style="text-align:center; margin-bottom: 1rem;">📊 Top 3 Predictions</h2>
+            <div class="categories">
+                {% for pred in top_3 %}
+                    <div class="category">
+                        <span class="category-icon">{{ category_icons.get(pred.class, '📦') }}</span>
+                        <span class="category-name">{{ pred.class.title() }}</span>
+                        <div class="upload-subtext">{{ '%.1f'|format(pred.confidence * 100) }}% Confidence</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-container" style="text-align: center; margin-top: 2rem;">
+            <a href="/" class="classify-btn">← Classify Another Image</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Type Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="leaf-container">
+        </div>
+
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static', filename='images/ewam.png') }}" alt="EWAM Logo" class="logo">
+            <h1>E-Waste Classifier</h1>
+            <p class="subtitle">🌿 AI-powered identification for a greener planet 🌿</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">6</span>Categories
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">95%</span>Accuracy
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">AI</span>Powered
+            </div>
+        </div>
+
+        <div class="categories">
+            <div class="category">
+                <div class="category-icon">💻</div>
+                <div class="category-name">Electronics</div>
+            </div>
+            <div class="category">
+                <div class="category-icon">🔋</div>
+                <div class="category-name">Batteries</div>
+            </div>
+            <div class="category">
+                <div class="category-icon">📱</div>
+                <div class="category-name">Mobiles</div>
+            </div>
+            <div class="category">
+                <div class="category-icon">⚙️</div>
+                <div class="category-name">PCB</div>
+            </div>
+             <div class="category">
+                <div class="category-icon">📺</div>
+                <div class="category-name">Appliances</div>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <form action="/predict" method="post" enctype="multipart/form-data">
+                <div class="upload-area">
+                    <div class="upload-icon">⬆️</div>
+                    <div class="upload-text">
+                        <strong>Upload Your E-Waste Image</strong>
+                        <span class="upload-subtext">Drag & drop or click to browse</span>
+                    </div>
+                    <input type="file" name="file" id="file-input" accept="image/*" required>
+                    <span id="file-name-display"></span>
+                </div>
+                <button type="submit" class="classify-btn">♻️ Classify E-Waste</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
