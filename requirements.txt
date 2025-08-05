@@ -7,3 +7,5 @@ scikit-learn>=1.0.0
 flask>=2.0.0
 pillow>=8.0.0
 werkzeug>=2.0.0
+gunicorn>=20.0.0           # Required by Render to serve Flask app
+python-dotenv>=0.21.0      # Optional: for using .env files securely
