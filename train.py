@@ -20,13 +20,13 @@ def train_model():
     if not os.path.exists(test_dir):
         raise FileNotFoundError(f"Test directory not found: {test_dir}")
     
-    print("Loading data...")
+    print("🔄 Loading data...")
     train_data, val_data, test_data, class_weights = load_data(train_dir, test_dir)
     
-    print("Building model...")
+    print("🛠 Building model...")
     model = build_e_waste_model(num_classes=train_data.num_classes)
     
-    print("Model summary:")
+    print("📋 Model summary:")
     model.summary()
     
     # Set up callbacks
@@ -38,7 +38,7 @@ def train_model():
             verbose=1
         ),
         ModelCheckpoint(
-            filepath=os.path.join(model_dir, "best_e_waste_model.h5"),
+            filepath=os.path.join(model_dir, "best_e_waste_model.keras"),  # ✅ Updated extension
             monitor='val_accuracy',
             save_best_only=True,
             verbose=1
@@ -52,7 +52,7 @@ def train_model():
         )
     ]
     
-    print("Training model...")
+    print("🚀 Training model...")
     history = model.fit(
         train_data,
         validation_data=val_data,
@@ -62,10 +62,11 @@ def train_model():
         verbose=1
     )
     
-    # Save final model
-    model.save(os.path.join(model_dir, "e_waste_model.h5"))
+    # ✅ Save final model in .keras format
+    final_model_path = os.path.join(model_dir, "e_waste_model.keras")
+    model.save(final_model_path)
     
-    print("✅ Model trained and saved successfully!")
+    print(f"✅ Model trained and saved successfully at {final_model_path}!")
     
     return history, model
 
