@@ -1,5 +1,5 @@
-tensorflow==2.11.0
-keras==2.11.0
+tensorflow==2.15.0
+keras==2.15.0
 numpy>=1.21.0
 matplotlib>=3.5.0
 seaborn>=0.11.0
@@ -7,5 +7,5 @@ scikit-learn>=1.0.0
 flask>=2.0.0
 pillow>=8.0.0
 werkzeug>=2.0.0
-gunicorn>=20.0.0           # Required by Render to serve Flask app
-python-dotenv>=0.21.0      # Optional: for using .env files securely
+gunicorn>=20.0.0
+python-dotenv>=0.21.0
