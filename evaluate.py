@@ -7,40 +7,59 @@ from src.data_loader import load_data
 from src.predictor import EWastePredictor
 import tensorflow as tf
 
+def retrain_and_save_model(train_dir, model_path):
+    """Train a simple CNN model and save it to .keras format"""
+    print("📦 Training new model since none was found...")
+    train_data, val_data, _, class_names = load_data(train_dir, val_dir=None)
+    
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Rescaling(1./255, input_shape=(224, 224, 3)),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(len(class_names), activation='softmax')
+    ])
+
+    model.compile(optimizer='adam',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    model.fit(train_data, epochs=5, validation_data=val_data)
+    model.save(model_path)
+    print(f"✅ New model trained and saved at {model_path}")
+
 def evaluate_model():
     """Evaluate the trained model on test data"""
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(base_dir, "models", "e_waste_model.h5")
+    model_path = os.path.join(base_dir, "models", "e_waste_model.keras")
     
-    if not os.path.exists(model_path):
-        print(f"❌ Model not found at {model_path}")
-        print("Please train the model first by running: python train.py")
-        return
-    
-    # Load test data
     train_dir = os.path.join(base_dir, "data", "modified-dataset", "train")
     test_dir = os.path.join(base_dir, "data", "modified-dataset", "test")
     
+    if not os.path.exists(model_path):
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        retrain_and_save_model(train_dir, model_path)
+    
+    # Load test data
     _, _, test_data, _ = load_data(train_dir, test_dir)
     
     # Load model
     model = tf.keras.models.load_model(model_path)
     
-    print("Evaluating model on test data...")
-    
-    # Get predictions
+    print("📊 Evaluating model on test data...")
     test_loss, test_accuracy = model.evaluate(test_data, verbose=1)
     
-    print(f"\n📊 Test Results:")
+    print(f"\n✅ Test Results:")
     print(f"Test Loss: {test_loss:.4f}")
     print(f"Test Accuracy: {test_accuracy:.4f}")
     
-    # Get detailed predictions for classification report
+    # Get predictions
     y_pred = model.predict(test_data)
     y_pred_classes = np.argmax(y_pred, axis=1)
     y_true = test_data.classes
-    
-    # Class names
     class_names = list(test_data.class_indices.keys())
     
     # Classification report
@@ -49,9 +68,8 @@ def evaluate_model():
     
     # Confusion matrix
     cm = confusion_matrix(y_true, y_pred_classes)
-    
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                 xticklabels=class_names, yticklabels=class_names)
     plt.title('Confusion Matrix')
     plt.ylabel('True Label')
@@ -65,7 +83,7 @@ def evaluate_model():
 def test_single_image(image_path):
     """Test the model on a single image"""
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(base_dir, "models", "e_waste_model.h5")
+    model_path = os.path.join(base_dir, "models", "e_waste_model.keras")
     
     if not os.path.exists(model_path):
         print(f"❌ Model not found at {model_path}")
@@ -91,12 +109,11 @@ def test_single_image(image_path):
     print(f"\nAll Probabilities: {result['all_probabilities']}")
 
 if __name__ == "__main__":
-    # Evaluate model
     try:
         accuracy = evaluate_model()
         print(f"\n✅ Evaluation completed. Final accuracy: {accuracy:.2%}")
     except Exception as e:
         print(f"❌ Evaluation failed: {str(e)}")
-    
-    # Test single image (uncomment and provide path to test)
-    # test_single_im
+
+    # To test a single image:
+    # test_single_image("path/to/image.jpg")
